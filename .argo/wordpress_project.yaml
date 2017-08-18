@@ -1,0 +1,19 @@
+---
+type: project
+version: 1
+name: WordPress
+description: Content management system (CMS) based on PHP and MySQL.
+actions:
+  run:
+    template: wordpress-deployment-workflow
+categories: ["database", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"database\"]"
+    publisher: Applatix
+assets:
+    icon: "/wordpress/icon.png"
+    publisher_icon: "/wordpress/AX_Pub.png"
+    detail: "/wordpress/detail.md"

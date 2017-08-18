@@ -1,0 +1,51 @@
+{{! Handlerbars template for MLB team total statistics }}
+<div class="row">
+  <div class="col-md-6 col-md-offset-1">
+
+  <div class="team-total-stats">
+    <table class="table table-responsive stats-table">
+      <caption><h4>ALL-TIME Regular Season Team Stats</h4></caption>
+      <thead>
+        <tr>
+          <th>Year(s)</th>
+          <th>G</th>
+          <th>W</th>
+          <th>L</th>
+          <th>Pct</th>
+          <th>WsWin</th>
+          <th>LgWin</th>
+          <th>DivWin</th>
+          <th>WcWin</th>
+          <th>TotWin</th>
+          <th>HR</th>
+          <th>H</th>
+          <th>SLG</th>
+          <th>BA</th>
+          <th>ERA</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each this}}
+      <tr>
+        <td>{{Yrs}}</td>
+        <td>{{G}}</td>
+        <td>{{W}}</td>
+        <td>{{L}}</td>
+        <td>{{Pct}}</td>
+        <td>{{WsWin}}</td>
+        <td>{{LgWin}}</td>
+        <td>{{DivWin}}</td>
+        <td>{{WcWin}}</td>
+        <td>{{TotWin}}</td>
+        <td>{{HR}}</td>
+        <td>{{H}}</td>
+        <td>{{SLG}}</td>
+        <td>{{BA}}</td>
+        <td>{{ERA}}</td>
+      </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>

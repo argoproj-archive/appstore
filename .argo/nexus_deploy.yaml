@@ -1,0 +1,52 @@
+---
+type: container
+version: 1
+name: nexus-repo-container
+description: Run a nexus repository server.
+resources:
+  mem_mib: 512
+  cpu_cores: 0.3
+image: sonatype/nexus:latest
+readiness_probe:
+  http_get:
+    path: "/nexus"
+    port: 8081
+  initial_delay_seconds: 5
+  timeout_seconds: 10
+
+---
+type: deployment
+version: 1
+name: nexus-repo-deployment
+description: This creates the nexus-repo deployment.
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "nexus-repo-deployment"
+scale:
+  min: 1
+inputs:
+  parameters:
+    APPNAME:
+      default: "nexus-repo"
+    DOMAIN:
+      default: ""
+    PREFIX:
+      default: ""
+external_routes:
+- dns_prefix: "%%inputs.parameters.PREFIX%%"
+  dns_domain: "%%inputs.parameters.DOMAIN%%"
+  target_port: 8081
+  ip_white_list:
+    - 0.0.0.0/0
+containers:
+  server:
+    template: nexus-repo-container
+
+---
+type: workflow
+version: 1
+name: nexus-repo-run-workflow
+description: This is a workflow that deploys and runs Nexus Repository.
+inputs:
+steps:
+  - DEPLOY-NEXUS:
+      template: nexus-repo-deployment

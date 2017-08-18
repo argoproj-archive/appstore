@@ -1,0 +1,38 @@
+{{! Handlerbars template for MLB franchises }}
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+
+
+      <div class="franchise-list">
+      <table
+          class="table table-responsive category-table">
+        <caption><h4>Franchises</h4></caption>
+        <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Initial Year</th>
+          <th>Active</th>
+          <th>Teams</th>
+        </tr>
+        </thead>
+        <tbody class="franchise-list-tbody">
+        {{#each this}}
+        <tr>
+          <td>{{num}}</td>
+          <td>{{Name}}</td>
+          <td>{{Year_Founded}}</td>
+          <td>{{Active}}</td>
+          <td><a href="#">{{team1}}</a>&nbsp;<a href="#">{{team2}}</a>&nbsp;
+            <a href="#">{{team3}}</a>
+          </td>
+        </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+
+  </div>
+</div>

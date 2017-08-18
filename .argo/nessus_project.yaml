@@ -1,0 +1,19 @@
+---
+type: project
+version: 1
+name: Nessus
+description: This is the workflow to deploy Nessus vulnerability scanner container.
+actions:
+  run:
+    template: Deploy Nessus
+categories: ["security", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"security\"]"
+    publisher: Applatix
+assets:
+    icon: "/nessus/nessus-logo.png"
+    publisher_icon: "/nessus/AX_Pub.png"
+    detail: "/nessus/README.md"

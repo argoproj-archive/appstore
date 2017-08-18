@@ -1,0 +1,140 @@
+---
+type: project
+version: 1
+name: MLB
+description: This is the workflow to deploy Mongo container, insert MLB data then deploy Node.js container with a web application to read MLB data.
+actions:
+    run:
+      template: Deploy MLB
+
+categories: ["demo", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"database\"]"
+    publisher: Applatix
+assets:
+    icon: /mlb-app/node-js-mongodb.png
+    publisher_icon: /mlb-app/AX_Pub.png
+    detail: /mlb-app/overview.md
+
+
+---
+type: workflow
+version: 1
+name: Deploy MLB
+description: This is the workflow to deploy Mongo container, insert MLB data then deploy Node.js container with a web application to read MLB data.
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    APPNAME:
+      default: mlb-app
+    REPO:
+      default: "%%session.repo%%"
+    YEAR:
+      default: 2016
+  
+steps:
+  - CHECKOUT:
+      template: argo-checkout
+  - DEPLOY_MONGO:
+      template: deploy-mongo
+  - INSERT_DATA:
+      template: insert-mlb-data
+      arguments:
+        artifacts.CODE: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"        
+  - DEPLOY-MLB:
+      template: deploy-mlb
+      arguments:
+        artifacts.CODE: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"
+
+---
+type: container
+version: 1
+name: insert-mlb-data
+description: MLB Data Insert
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: python:3.5.2
+command: [sh, -c, 'pip install pymongo && pip install requests && python /src/mlb-app/loader.py --db mongo.%%inputs.parameters.APPNAME%% --year %%inputs.parameters.YEAR%%']
+inputs:
+  artifacts:
+    CODE:
+      path: /src
+  parameters:
+    YEAR:
+    APPNAME:
+
+---
+type: deployment
+version: 1
+name: deploy-mongo
+inputs:
+  parameters:
+    APPNAME:
+      default: mlb-app
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: mongo-deploy
+scale:
+  min: 1
+strategy:
+  type: rolling_update
+  rolling_update:
+    max_unavailable: 0
+    max_surge: 1   
+internal_routes:
+  - name: mongo
+    ports:
+      - port: 27017
+        target_port: 27017
+containers:
+  server:
+    image: mongo:3.2.9
+    resources:
+      mem_mib: 2048
+      cpu_cores: 0.3
+
+---
+type: deployment
+version: 1
+name: deploy-mlb
+inputs:
+  artifacts:
+    CODE:
+  parameters:
+    APPNAME:
+      default: mlb-app
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: mlb-deploy
+scale:
+  min: 1
+strategy:
+  type: rolling_update
+  rolling_update:
+    max_unavailable: 0
+    max_surge: 1 
+external_routes:
+  - target_port: 5000
+    ip_white_list:
+      - 0.0.0.0/0
+containers:
+  server: 
+    resources:
+      mem_mib: 1024
+      cpu_cores: 0.4
+    image: docker.io/library/node:0.10
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: MONGOLAB_URI
+        value: mongodb://mongo:27017/MLB  
+    command: ["bash", "-c"]
+    args: ["cd src/mlb-app && npm install && node app.js"]
+    inputs:
+      artifacts:
+        CODE:
+          from: "%%inputs.artifacts.CODE%%"
+          path: /src

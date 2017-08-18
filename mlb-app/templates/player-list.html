@@ -1,0 +1,39 @@
+{{! Handlerbars template for MLB players }}
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+
+
+      <div class="player-list">
+      <table
+          class="table table-responsive category-table">
+        <caption><h4>Players</h4></caption>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Ht</th>
+            <th>Wt</th>
+            <th>Birthdate</th>
+            <th>Birthplace</th>
+          </tr>
+        </thead>
+
+        <tbody class="player-list-tbody">
+        {{#each this}}
+        <tr>
+          <td>{{num}}</td>
+          <td><a href="#">{{profile.Name}}</a></td>
+          <td>{{profile.Ht}}</td>
+          <td>{{profile.Wt}}</td>
+          <td>{{profile.Birthdate}}</td>
+          <td>{{profile.Birthplace}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+
+  </div>
+</div>

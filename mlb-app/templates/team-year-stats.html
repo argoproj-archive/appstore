@@ -1,0 +1,73 @@
+{{! Handlerbars template for MLB team year by year statistics }}
+<div class="row">
+  <div class="col-md-6 col-md-offset-1">
+
+    <div class="team-yearly-stats">
+      <table
+          class="table table-condensed table-responsive stats-table">
+        <caption><h4>Regular Season Team Stats</h4></caption>
+        <thead>
+        <tr>
+          <th></th>
+          <th>Season</th>
+          <th>G</th>
+          <th>W</th>
+          <th>L</th>
+          <th>WSWin</th>
+          <th>AB</th>
+          <th>R</th>
+          <th>H</th>
+          <th>2B</th>
+          <th>3B</th>
+          <th>HR</th>
+          <th>BB</th>
+          <th>SO</th>
+          <th>SB</th>
+          <th>OppR</th>
+          <th>OppH</th>
+          <th>OppHR</th>
+          <th>OppBB</th>
+          <th>OppSO</th>
+          <th>ER</th>
+          <th>ERA</th>
+          <th>SHO</th>
+          <th>SV</th>
+          <th>E</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this}}
+        <tr>
+          <td>{{num}}</td>
+          <td>{{yearID}}</td>
+          <td>{{G}}</td>
+          <td>{{W}}</td>
+          <td>{{L}}</td>
+          <td>{{WSWin}}</td>
+          <td>{{AB}}</td>
+          <td>{{R}}</td>
+          <td>{{H}}</td>
+          <td>{{2B}}</td>
+          <td>{{3B}}</td>
+          <td>{{HR}}</td>
+          <td>{{BB}}</td>
+          <td>{{SO}}</td>
+          <td>{{SB}}</td>
+          <td>{{RA}}</td>
+          <td>{{HA}}</td>
+          <td>{{HRA}}</td>
+          <td>{{BBA}}</td>
+          <td>{{SOA}}</td>
+          <td>{{ER}}</td>
+          <td>{{ERA}}</td>
+          <td>{{SHO}}</td>
+          <td>{{SV}}</td>
+          <td>{{E}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

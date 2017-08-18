@@ -1,0 +1,19 @@
+---
+type: project
+version: 1
+name: Jenkins
+description: This is the workflow to deploy Jenkins as container.
+actions:
+  run:
+    template: Deploy Jenkins
+categories: ["devops"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"build\"]"
+    publisher: Applatix
+assets:
+    icon: "/jenkins/jenkins_docker.png"
+    publisher_icon: "/jenkins/AX_Pub.png"
+    detail: "/jenkins/overview.md"

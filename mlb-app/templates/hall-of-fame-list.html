@@ -1,0 +1,41 @@
+{{! Handlerbars template for MLB Hall of Fame players }}
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+
+
+      <div class="hof-list">
+        <table class="table table-responsive category-table">
+          <caption><h4>Hall of Fame Members</h4></caption>
+          <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Year Inducted</th>
+            <th>Ballots</th>
+            <th>Votes Needed</th>
+            <th>Votes</th>
+            <th>Category</th>
+            <th>Voting Method</th>
+          </tr>
+          </thead>
+          <tbody class="hof-list-tbody">
+          {{#each this}}
+          <tr>
+            <td>{{num}}</td>
+            <td><a href="#">{{name}}</a></td>
+            <td>{{yearInducted}}</td>
+            <td>{{ballots}}</td>
+            <td>{{votesNeeded}}</td>
+            <td>{{votes}}</td>
+            <td>{{category}}</td>
+            <td>{{votingMethod}}</td>
+          </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+
+  </div>
+</div>

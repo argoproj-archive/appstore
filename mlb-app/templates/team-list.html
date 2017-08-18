@@ -1,0 +1,39 @@
+{{! Handlerbars template for MLB Teams}}
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+
+
+      <div class="team-list">
+      <table
+          class="table table-responsive category-table">
+        <caption><h4>Teams</h4></caption>
+        <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Id</th>
+          <th>League</th>
+          <th>Division</th>
+          <th>Park</th>
+        </tr>
+        </thead>
+        <tbody class="team-list-tbody">
+        {{#each this}}
+        <tr>
+          <td>{{num}}</td>
+          <td><a href="#">{{_id}}</a></td>
+          <td>{{teamID}}</td>
+          <td>{{league}}</td>
+          <td>{{division}}</td>
+          <td>{{park}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+
+    </div>
+  </div>
+</div>

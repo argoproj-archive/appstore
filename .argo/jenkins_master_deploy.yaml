@@ -1,0 +1,46 @@
+---
+type: container
+version: 1
+name: run-jenkins-node
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.5
+image: jenkins
+inputs:
+  parameters:
+    PROBE_CMD:
+
+---
+type: deployment
+version: 1
+name: deploy-jenkins
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "run-jenkins-deploy"
+inputs:
+  parameters:
+    APPNAME:
+      default: "jenkins-master-app"
+scale:
+  min: 1
+external_routes:
+- target_port: 8080
+  ip_white_list:
+    - 0.0.0.0/0
+containers:
+  server:
+    template: run-jenkins-node
+    arguments:
+      parameters.PROBE_CMD: sh -c 'ls -l /src '
+
+---
+type: workflow
+version: 1
+name: Deploy Jenkins 
+description: This is the workflow to deploy Jenkins as a Master node.
+inputs:
+  parameters:
+    APPNAME:
+      default: "jenkins-master-app"
+steps:
+  - DEPLOY-JENKINS:
+      template: deploy-jenkins

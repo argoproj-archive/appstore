@@ -1,0 +1,70 @@
+---
+type: container
+version: 1
+name: mongo_server
+description: mongo server
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: "mongo:%%inputs.parameters.IMAGE_TAG%%"
+inputs:
+  parameters:
+    IMAGE_TAG:
+      description: mongo docker image tag, e.g. 3.0.0. Default to latest
+      default: latest
+
+---
+type: container
+version: 1
+name: mongo_client
+description: mongo client
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: "mongo:%%inputs.parameters.IMAGE_TAG%%"
+command: ["mongo"]
+args: [
+  "%%inputs.parameters.HOST_IP%%:27017 < /src%%inputs.parameters.SCRIPT%%"
+]
+inputs:
+  parameters:
+    IMAGE_TAG:
+      description: mongo docker image tag, e.g. 3.0.0. Default to latest
+      default: latest
+    HOST_IP:
+      description: ip of the mongo server to connect
+    SCRIPT:
+      description: script to execute
+  artifacts:
+    CODE:
+      path: /src
+
+---
+type: workflow
+version: 1
+name: Mongo Server Test
+description: This is the workflow for mongo server test
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+    SCRIPT:
+      default: "/mongo/scripts/showdb.js"
+      description: script to execute
+fixtures:
+- mongo_remote:
+    template: mongo_server
+    arguments:
+      parameters.IMAGE_TAG: "3.0.0"
+steps:
+  - CHECKOUT:
+      template: argo-checkout
+  - TEST:
+      template: mongo_client
+      arguments:
+        parameters.IMAGE_TAG: latest
+        parameters.HOST_IP: "%%fixtures.mongo_remote.ip%%"
+        artifacts.CODE: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"
+

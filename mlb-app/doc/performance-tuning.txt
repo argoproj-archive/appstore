@@ -1,0 +1,8 @@
+Performance Tuning/Strategy
+----------------------------
+
+1. Use res.setHeader('Cache-Control', 'public, max-age=xxxx');
+to cache static files and database responses
+
+2. Use indexes on mongodb database collections to speed up queries
+(see indexes.js file)

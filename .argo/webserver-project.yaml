@@ -1,0 +1,34 @@
+---
+type: project
+version: 1
+name: Web Server
+description: Start a simple node-based web server.
+actions:
+  deploy v1:
+    template: webserver-deployment-workflow
+    arguments:
+      parameters.COMMIT: bd7d084
+  deploy v2:
+    template: webserver-deployment-workflow
+    arguments:
+      parameters.COMMIT: 497e5ad
+  build and deploy v1 image:
+    template: webserver-image-build-approve-deploy
+    arguments:
+      parameters.VERSION: v1
+  build and deploy v2 image:
+    template: webserver-image-build-approve-deploy
+    arguments:
+      parameters.VERSION: v2
+ 
+
+categories: ["demo", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    publisher: Applatix    
+assets:
+    icon: "/webserver/icon.png"
+    publisher_icon: "/webserver/AX_Pub.png"
+    detail: "/webserver/README.md"

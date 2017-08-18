@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MLB Database</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <!-- Project css -->
+    <link rel="stylesheet" href="css/jqpagination.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+      filter: none;
+    }
+  </style>
+  <![endif]-->
+
+</head>
+
+<body class="gradient">
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+                <a class="navbar-brand" href="index.html">mlb-db</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#" id="players">Players</a></li>
+                    <li><a href="#" id="hof">Hall of Fame</a></li>
+                    <li><a href="#" id="franchises">Franchises</a></li>
+                    <li><a href="#" id="teams">Teams</a></li>
+                    <li><a href="#" id="about">About</a></li>
+                </ul>
+
+                <form class="navbar-form navbar-right search" role="form">
+                    <div class="form-group">
+                        <input type="text" id="search" size="35" class="form-control" placeholder="Search Players">
+                    </div>
+                </form>
+
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+        <!-- container -->
+    </div>
+    <!-- navbar -->
+
+
+    <div id="search-results">
+        <ul></ul>
+    </div>
+
+
+    <div class="header">
+        <h1>mlb-db</h1>
+    </div>
+
+    <div class="container">
+        <div class="db-results"></div>
+        <div class="page-bar"></div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="js/jquery.uriAnchor-1.1.3.js"></script>
+    <script src="js/handlebars.js"></script>
+    <script src="js/jquery.jqpagination.min.js"></script>
+    <script src="js/spa.js"></script>
+    <script src="js/spa.util.js"></script>
+    <script src="js/spa.shell.js"></script>
+    <script src="js/spa.autoc_search.js"></script>
+    <script src="js/spa.search.js"></script>
+    <script src="js/spa.pagination.js"></script>
+    <script src="js/spa.player.js"></script>
+    <script src="js/spa.team.js"></script>
+    <script>
+        // jQuery DOM ready
+        $(function() {
+            spa.initModule();
+        });
+    </script>
+</body>
+
+</html>

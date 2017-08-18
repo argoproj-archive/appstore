@@ -1,0 +1,47 @@
+---
+type: container
+version: 1
+name: run-bugzilla-node
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.5
+image: dklawren/docker-bugzilla
+inputs:
+  parameters:
+    PROBE_CMD:
+
+---
+type: deployment
+version: 1
+name: deploy-bugzilla
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "run-bugzilla-deploy"
+inputs:
+  parameters:
+    APPNAME:
+      default: "bugzilla-app"
+scale:
+  min: 1
+external_routes:
+  - target_port: 80
+    ip_white_list:
+    - 0.0.0.0/0
+containers:
+  server:
+    template: run-bugzilla-node
+    arguments:
+      parameters.PROBE_CMD: sh -c 'ls -l /src'
+
+---
+type: workflow
+version: 1
+name: Deploy Bugzilla 
+description: Workflow to deploy Bugzilla.
+inputs:
+  parameters:
+    APPNAME:
+      default: "bugzilla-app"
+steps:
+  - DEPLOY-BUGZILLA:
+      template: deploy-bugzilla
+

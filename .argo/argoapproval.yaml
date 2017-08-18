@@ -1,0 +1,21 @@
+---
+type: container
+version: 1
+name: argoapproval
+description: Get approvals
+
+inputs:
+  parameters:
+    REQUIRED_APPROVALS:
+    OPTIONAL_APPROVALS:
+    NUMBER_OF_OPTIONAL_APPROVALS_NEEDED:
+    TIMEOUT_IN_MINUTES:
+
+image: get.applatix.io/axapproval:v2.0.1
+resources:
+  mem_mib: 128
+  cpu_cores: 0.01
+command: [sh -c 'argoapproval --required_list "%%inputs.parameters.REQUIRED_APPROVALS%%"
+    --optional_list "%%inputs.parameters.OPTIONAL_APPROVALS%%"
+    --number_optional "%%inputs.parameters.NUMBER_OF_OPTIONAL_APPROVALS_NEEDED%%"
+    --timeout "%%inputs.parameters.TIMEOUT_IN_MINUTES%%"']

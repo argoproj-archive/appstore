@@ -1,0 +1,21 @@
+---
+type: project
+version: 1
+name: MongoDB
+description: Document-oriented (NoSQL) database.
+actions:
+  run:
+    template: Mongo Server Test
+    arguments:
+      parameters.SCRIPT: "/mongo/scripts/showdb.js"
+categories: ["database"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"nosql\"]"
+    publisher: Applatix
+assets:
+    icon: "/mongo/mongo.png"
+    publisher_icon: "/mongo/AX_Pub.png"
+    detail: "/mongo/README.md"

@@ -1,0 +1,185 @@
+
+body {
+    font: 1.4em/1.3 "Lucida Grande", "Lucida Sans Unicode",
+    "Lucida Sans", Verdana, Tahoma, sans-serif;
+    /* background-color: gray; */
+    background-image: url(../images/notebook.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+}
+
+.navbar {
+   margin-bottom: 0;
+}
+
+/* Search results */
+#search-results {
+    position: absolute;
+    display: none;
+    width: 170px;
+    border: 1px solid darkgray;
+}
+
+#search-results ul {
+
+}
+
+#search-results li {
+    margin-left: -30%;
+    padding: 2px;
+
+    list-style: none;
+
+}
+.odd {
+    background-color: lightblue;
+}
+
+.cur {
+    color: white;
+    background-color: blue;
+}
+
+
+.db-results {
+    width: 100%;
+    margin-top: 2em;
+
+}
+
+/*
+.header {
+    width: 100%;
+    margin-top: -4.7em;
+    min-height: 300px;
+    background-image: url(../images/header.jpg);
+    background-repeat: no-repeat;
+
+    background-position: center center;
+}
+*/
+
+.header h1 {
+    color: white;
+    font-size: 8em;
+    margin-top: 5%;
+    margin-left: 5%;
+}
+
+.large.pagination {
+    margin-left: 7%;
+}
+
+table tbody tr td a  {
+    /* color: blue; */
+    /* font-weight: bold; */
+}
+
+/* Player and team profile */
+.profile-table {
+    margin-bottom: 3%;
+
+}
+
+.profile-table th, .profile-table td {
+    padding: 0.2em;
+}
+
+.player-profile h3 span:first-of-type {
+    color: orangered;
+}
+.player-profile {
+    border-top: 3px solid darkgray;
+    border-bottom: 3px solid darkgray;
+}
+
+.team-profile h3 span:first-of-type {
+    color: orangered;
+}
+.team-profile {
+    border-top: 3px solid darkgray;
+    border-bottom: 3px solid darkgray;
+}
+
+.player-batting-stats, .player-pitching-stats,
+.player-list, .team-list, .franchise-list,
+.hof-list
+{
+    font-size: 85%;
+}
+
+/* Player, HOF, Teams and Franchises tables */
+.category-table caption {
+    text-align: left;
+    margin-left: 0;
+    color: orangered;
+
+}
+
+.category-table td, .category-table th {
+
+    border-bottom: 1px solid #bababa !important;
+
+}
+
+.category-table th {
+    background-color: #bababa;
+
+
+}
+
+.category-table tr:hover {
+    background-color: #bababa;
+}
+
+/* Player and Team stats tables */
+.stats-table {
+    margin: 3% 0 3% 0;
+
+}
+
+.stats-table caption {
+    text-align: left;
+    margin-left: 0;
+    color: darkblue;
+
+}
+
+.stats-table th {
+    border-bottom: 1px solid #bababa !important;
+    background-color: #bababa;
+}
+
+.stats-table td {
+    border-bottom: 1px solid #bababa !important;
+}
+
+.stats-table tr:hover {
+    background-color: #bababa;
+
+
+}
+
+
+.team-yearly-stats, .player-career-stats, .team-total-stats {
+    font-size: 85%;
+    border-bottom: 3px solid darkgray;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and
+(max-device-width : 480px) {
+
+    .header h1 {
+        font-size: 4em;
+    }
+}
+
+

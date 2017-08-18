@@ -1,0 +1,55 @@
+{{! Handlerbars template for MLB player pitching statistics }}
+<div class="row">
+  <div class="col-md-4 col-md-offset-2">
+    <div class="player-pitching-stats">
+
+      <table class="table table-responsive stats-table">
+        <caption><h4>PITCHING Regular Season Stats</h4></caption>
+        <thead>
+          <tr>
+            <th>Season</th>
+            <th>Team</th>
+            <th>G</th>
+            <th>GS</th>
+            <th>CG</th>
+            <th>SO</th>
+            <th>W</th>
+            <th>L</th>
+            <th>SV</th>
+            <th>IP</th>
+            <th>H</th>
+            <th>R</th>
+            <th>ER</th>
+            <th>HR</th>
+            <th>K</th>
+            <th>BB</th>
+            <th>ERA</th>
+          </tr>
+        </thead>
+        <tbody>
+            {{#each this}}
+            <tr>
+              <td>{{yearID}}</td>
+              <td>{{teamID}}</td>
+              <td>{{G}}</td>
+              <td>{{GS}}</td>
+              <td>{{CG}}</td>
+              <td>{{SHO}}</td>
+              <td>{{W}}</td>
+              <td>{{L}}</td>
+              <td>{{SV}}</td>
+              <td>{{IP}}</td>
+              <td>{{H}}</td>
+              <td>{{R}}</td>
+              <td>{{ER}}</td>
+              <td>{{HR}}</td>
+              <td>{{SO}}</td>
+              <td>{{BB}}</td>
+              <td>{{ERA}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+---
+type: container
+version: 1
+name: nodejs
+description: Container with installed Node JS
+resources:
+  mem_mib: 2048
+  cpu_cores: 0.4
+image: docker.io/library/node:6.3.1
+command: ["sh", "-c"]
+args: ['%%inputs.parameters.CMD%%']
+inputs:
+  parameters:
+    CMD:
+      description: The command to be run inside the container.
+  artifacts:
+    CODE:
+      path: src
+outputs:
+  artifacts:
+    CODE:
+      path: /src
+
+---
+type: workflow
+version: 1
+name: NodeJS Checkout and Build
+description: NodeJS Checkout and Build
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+outputs:
+  artifacts:
+    CODE:
+      from: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"
+steps:
+- CHECKOUT:
+    template: argo-checkout
+- BUILD:
+    template: nodejs
+    arguments:
+      parameters.CMD: "cd /src && npm --version"
+      artifacts.CODE: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"

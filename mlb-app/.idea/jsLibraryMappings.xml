@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$/app.js" libraries="{Node.js Globals}" />
+    <file url="file://$PROJECT_DIR$/db-config.js" libraries="{Node.js Globals}" />
+    <file url="file://$PROJECT_DIR$/public/index.html" libraries="{jquery-1.10.2}" />
+    <file url="file://$PROJECT_DIR$/public/js/spa.player.js" libraries="{jquery-1.10.2}" />
+    <file url="file://$PROJECT_DIR$/public/js/spa.search.js" libraries="{jquery-1.10.2}" />
+    <file url="file://$PROJECT_DIR$/public/js/spa.shell.js" libraries="{jquery-1.9.1}" />
+    <file url="file://$PROJECT_DIR$/routes/team.js" libraries="{Node.js Globals}" />
+  </component>
+</project>
+

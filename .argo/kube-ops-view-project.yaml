@@ -1,0 +1,18 @@
+---
+type: project
+version: 1
+name: Kubernetes Operational View
+description: Application for monitoring Kubernetes cluster state.
+actions:
+  run:
+    template: kube-ops-view-workflow
+categories: ["monitoring", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    publisher: Applatix
+assets:
+    icon: "/kube-ops-view/icon.png"
+    publisher_icon: "/kube-ops-view/AX_Pub.png"
+    detail: "/kube-ops-view/README.md"

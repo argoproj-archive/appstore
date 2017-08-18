@@ -1,0 +1,52 @@
+{{! Handlerbars template for MLB player career batting statistics }}
+<div class="row">
+  <div class="col-md-6 col-md-offset-2">
+
+    <div class="player-career-stats">
+
+      <table class="table table-responsive stats-table">
+        <caption><h4>BATTING Regular Season Career Stats</h4></caption>
+        <thead>
+        <tr>
+          <th>Years</th>
+          <th>G</th>
+          <th>AB</th>
+          <th>H</th>
+          <th>R</th>
+          <th>RBI</th>
+          <th>HR</th>
+          <th>2B</th>
+          <th>3B</th>
+          <th>SB</th>
+          <th>BB</th>
+          <th>SO</th>
+          <th>BA</th>
+          <th>OBP</th>
+          <th>SLG</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this }}
+        <tr>
+          <td>{{Yrs}}</td>
+          <td>{{G}}</td>
+          <td>{{AB}}</td>
+          <td>{{H}}</td>
+          <td>{{R}}</td>
+          <td>{{RBI}}</td>
+          <td>{{HR}}</td>
+          <td>{{2B}}</td>
+          <td>{{3B}}</td>
+          <td>{{SB}}</td>
+          <td>{{BB}}</td>
+          <td>{{SO}}</td>
+          <td>{{BA}}</td>
+          <td>{{OBP}}</td>
+          <td>{{SLG}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

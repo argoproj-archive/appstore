@@ -1,0 +1,13 @@
+{
+  "name": "web_app",
+  "version": "2.0.0",
+  "description": "Node on Docker",
+  "author": "Dinar Dalvi <dinar@applatix.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}

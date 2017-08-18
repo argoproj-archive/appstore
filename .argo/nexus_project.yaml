@@ -1,0 +1,18 @@
+---
+type: project
+version: 1
+name: Nexus Repository
+description: Application for running Nexus Repository in Applatix.
+actions:
+  run:
+    template: nexus-repo-run-workflow
+categories: ["devops", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    publisher: Applatix
+assets:
+    icon: "/nexus/icon.png"
+    publisher_icon: "/nexus/AX_Pub.png"
+    detail: "/nexus/README.md"

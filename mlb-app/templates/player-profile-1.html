@@ -1,0 +1,45 @@
+{{! Handlerbars template for MLB player profile }}
+<div class="row player-profile-row">
+  <div class="col-md-6 col-md-offset-2">
+    <div class="player-profile">
+      <h3><span>{{nameFirst}}&nbsp;{{nameLast}}&nbsp;</span>
+        <span><small>{{teamID}}</small></span><br>
+        <small>{{POS}}</small>
+      </h3>
+      <table class="table-responsive profile-table">
+        <tr>
+          <th>Full Name:</th>
+          <td>{{nameGiven}} {{nameLast}}</td>
+        </tr>
+        <tr>
+          <th>Birthdate:</th>
+          <td>{{birthYear}}-{{birthMonth}}-{{birthDay}}</td>
+          <th>BirthPlace:</th>
+          <td><span>{{birthCity}}</span>,
+            <span>{{birthState}}</span>
+            <span>{{birthCountry}}</span>
+          </td>
+        </tr>
+        <tr>
+          <th>Debut:</th>
+          <td>{{debut}}</td>
+          <th>Final Game:</th>
+          <td>{{finalGame}}</td>
+        </tr>
+
+        <tr>
+          <th>Height:</th>
+          <td>{{height}}</td>
+          <th>Weight:</th>
+          <td>{{weight}}</td>
+        </tr>
+        <tr>
+          <th>Bats:</th>
+          <td>{{bats}}</td>
+          <th>Throws:</th>
+          <td>{{throws}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+---
+type: project
+version: 1
+name: Bugzilla
+description: Workflow to deploy Bugzilla with PostgreSQL.
+actions:
+  run:
+    template: Deploy Bugzilla
+categories: ["devops"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"bugtracking\"]"
+    publisher: Applatix
+assets:
+    icon: "/bugzilla/bugzilla.png"
+    publisher_icon: "/bugzilla/AX_Pub.png"
+    detail: "/bugzilla/overview.md"

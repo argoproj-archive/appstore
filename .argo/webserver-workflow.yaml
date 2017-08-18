@@ -1,0 +1,36 @@
+---
+type: workflow
+version: 1
+name: webserver-deployment-workflow
+inputs:
+  parameters:
+    APPNAME:
+      default: "webserver"
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+steps:
+- deploy:
+    template: webserver-deployment
+---
+type: deployment
+version: 1
+name: webserver-deployment
+inputs:
+  parameters:
+    APPNAME:
+    COMMIT:
+    REPO:
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "node"
+external_routes:
+- target_port: 80
+  ip_white_list:
+    - 0.0.0.0/0
+containers:
+  webserver-container:
+    description: Run a node based web server.
+    image: node:argon
+    command: ["git clone -n %%inputs.parameters.REPO%% /src && cd /src && git checkout %%inputs.parameters.COMMIT%% && cp -R /src/webserver/ /usr/src/app && cd /usr/src/app && npm install && npm start"]
+

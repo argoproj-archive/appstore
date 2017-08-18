@@ -1,0 +1,59 @@
+{{! Handlerbars template for MLB player batting statistics }}
+<div class="row player-batting-stats-row">
+  <div class="col-md-4 col-md-offset-2">
+
+    <div class="player-batting-stats">
+      <table
+          class="table table-responsive stats-table">
+        <caption><h4>BATTING Regular Season Stats</h4></caption>
+        <thead>
+        <tr>
+          <th>Season</th>
+          <th>Team</th>
+          <th>GP</th>
+          <th>AB</th>
+          <th>R</th>
+          <th>H</th>
+          <th>2B</th>
+          <th>3B</th>
+          <th>HR</th>
+          <th>RBI</th>
+          <th>BB</th>
+          <th>SO</th>
+          <th>SB</th>
+          <th>CS</th>
+          <th>SF</th>
+          <th>SH</th>
+          <th>HBP</th>
+          <th>BA</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this}}
+        <tr>
+          <td>{{yearID}}</td>
+          <td>{{teamID}}</td>
+          <td>{{G}}</td>
+          <td>{{AB}}</td>
+          <td>{{R}}</td>
+          <td>{{H}}</td>
+          <td>{{2B}}</td>
+          <td>{{3B}}</td>
+          <td>{{HR}}</td>
+          <td>{{RBI}}</td>
+          <td>{{BB}}</td>
+          <td>{{SO}}</td>
+          <td>{{SB}}</td>
+          <td>{{CS}}</td>
+          <td>{{SF}}</td>
+          <td>{{SH}}</td>
+          <td>{{HBP}}</td>
+          <td>{{BA}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

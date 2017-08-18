@@ -1,0 +1,25 @@
+---
+type: project
+version: 1
+name: Hello World!
+description: Hello World!
+actions:
+  run:
+    template: hello-world
+categories: ["demo"]
+publish:
+  branches:
+    - master
+labels:
+    publisher: Applatix
+assets:
+    icon: "/hello-world/icon.png"
+    publisher_icon: "/publishers/AX_Pub.png"
+    detail: "/hello-world/README.md"
+
+---
+type: container
+version: 1
+name: hello-world
+description: Hello World!
+image: hello-world

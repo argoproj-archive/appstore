@@ -1,0 +1,106 @@
+---
+type: workflow
+version: 1
+name: wordpress-deployment-workflow
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+    APPNAME:
+      default: "wp-app"
+steps:
+  - checkout:
+      template: argo-checkout
+  - deploy-mysql:
+      template: wordpress-deploy-mysql
+      arguments:
+        artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"
+  - deploy-wp:
+      template: deploy-wordpress
+      arguments:
+        artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"
+---
+type: deployment
+version: 1
+name: wordpress-deploy-mysql
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "wordpress-mysql-deploy"
+inputs:
+  parameters:
+    APPNAME:
+      default: "wp-app"
+  artifacts:
+    CODE:
+  
+scale:
+  min: 1
+external_routes:
+- dns_prefix:
+  target_port: 3306
+  ip_white_list:
+  - 54.149.149.230/32
+internal_routes:
+- name: mysql
+  ports:
+  - port: 3306
+    target_port: 3306
+containers:
+  wordpress-mysql-deployment-container:
+    resources:
+      mem_mib: 1024
+      cpu_cores: 0.3
+    image: "mysql:5.7"
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: wordpress
+    - name: MYSQL_DATABASE
+      value: wordpress
+    - name: MYSQL_USER
+      value: wordpress
+    - name: MYSQL_PASSWORD
+      value: wordpress  
+    inputs:
+      artifacts:
+        CODE:
+          from: "%%inputs.artifacts.CODE%%"
+          path: "/src"
+
+---
+type: deployment
+version: 1
+name: deploy-wordpress
+inputs:
+  parameters:
+    APPNAME:
+      default: "wp-app"
+  artifacts:
+    CODE:
+   
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "wordpress-deploy"
+scale:
+  min: 1
+external_routes:
+  - dns_prefix:
+    target_port: 80
+    ip_white_list:
+    - 0.0.0.0/0
+containers:
+  wordpress-deployment-container:
+    resources:
+      mem_mib: 750
+      cpu_cores: 0.5
+    image: "wordpress:latest"
+    env:
+    - name: WORDPRESS_DB_HOST
+      value: mysql:3306
+    - name: WORDPRESS_DB_PASSWORD
+      value: wordpress
+    inputs:
+      artifacts:
+        CODE:
+          from: "%%inputs.artifacts.CODE%%"
+          path: "/src"
+

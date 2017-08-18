@@ -1,0 +1,74 @@
+---
+type: project
+version: 1
+name: Nginx
+description: Web server, reverse proxy, load balancer and HTTP cache.
+actions:
+  test:
+    template: nginx server test
+categories: ["network"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"network\"]"
+    publisher: Applatix
+assets:
+    icon: "/nginx/nginx.png"
+    publisher_icon: "/nginx/AX_Pub.png"
+    detail: "/nginx/README.md"
+
+---
+type: workflow
+version: 1
+name: nginx server test
+description: This is the workflow for nginx server test
+inputs:
+  parameters:
+fixtures:
+  - NGINX_REMOTE:
+      template: nginx_server
+      arguments:
+        parameters.IMAGE_TAG: 1.11.10
+steps:
+  - TEST:
+      template: nginx_test_client
+      arguments:
+        parameters.IMAGE_TAG: 12.04.5
+        parameters.HOST_IP: "%%fixtures.NGINX_REMOTE.ip%%"
+
+---
+type: container
+version: 1
+name: nginx_server
+description: nginx server
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: "nginx:%%inputs.parameters.IMAGE_TAG%%"
+inputs:
+  parameters:
+    IMAGE_TAG:
+      description: nginx docker image tag, e.g. 1.11.10. Default to latest
+      default: latest
+
+---
+type: container
+version: 1
+name: nginx_test_client
+description: nginx test client
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: "ubuntu:%%inputs.parameters.IMAGE_TAG%%"
+command: ["sh", "-c"]
+args: [apt-get update && apt-get install -y wget && wget %%inputs.parameters.HOST_IP%%]
+inputs:
+  parameters:
+    IMAGE_TAG:
+      description: ubuntu docker image tag, e.g. 3.0.0. Default to latest
+      default: latest
+    HOST_IP:
+      description: ip of the nginx server to connect
+   
+

@@ -1,0 +1,108 @@
+---
+type: project
+version: 1
+name: PostgreSQL
+description: Relational database with object-oriented features.
+actions:
+  test:
+    template: Postgres Server test
+    arguments:
+      parameters.SCRIPT: "/postgres/scripts/showdb.sql"
+categories: ["database"]
+publish:
+  branches:
+    - master
+labels:
+  tags: "[\"sql\"]"
+  publisher: Applatix
+assets:
+  icon: "/postgres/postgres.png"
+  publisher_icon: "/postgres/AX_Pub.png"
+  detail: "/postgres/README.md"
+
+---
+type: workflow
+version: 1
+name: Postgres Server test
+description: This is the workflow for Postgres server test
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+    SCRIPT: 
+      default: "/postgres/scripts/showdb.sql"
+      description: script to execute     
+fixtures:
+  - POSTGRES_REMOTE:
+      template: postgres_server
+      arguments:
+        parameters.ROOT_PASSWORD: server
+        parameters.IMAGE_TAG: "9.2.20"
+steps:
+  - CHECKOUT:
+      template: argo-checkout
+  - TEST:
+      template: postgres_client
+      arguments:
+        parameters.IMAGE_TAG: "9.2.20"
+        parameters.HOST_IP: "%%fixtures.POSTGRES_REMOTE.ip%%"
+        parameters.USER: postgres
+        parameters.PASSWORD: server
+        artifacts.CODE: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"
+     
+---
+type: container
+version: 1
+name: postgres_server
+description: postgres server
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: postgres:%%inputs.parameters.IMAGE_TAG%%
+env:
+- name: POSTGRES_PASSWORD
+  value: "%%inputs.parameters.ROOT_PASSWORD%%"
+inputs:
+  parameters:
+    IMAGE_TAG:
+      description: postgres docker image tag, e.g. 9.2.20. Default to latest
+      default: latest
+    ROOT_PASSWORD:
+      description: password for postgres root user
+
+---
+type: container
+version: 1
+name: postgres_client
+description: Postgres client
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: postgres:%%inputs.parameters.IMAGE_TAG%%
+env:
+- name: POSTGRES_PASSWORD
+  value: client
+command: ["sh","-c"]  
+args: ["psql postgresql://%%inputs.parameters.USER%%:%%inputs.parameters.PASSWORD%%@%%inputs.parameters.HOST_IP%% < /src%%inputs.parameters.SCRIPT%%"]
+inputs:
+  artifacts:
+    CODE:
+      path: "/src"  
+  parameters:
+    IMAGE_TAG:
+      description: postgres docker image tag, e.g. 9.2.20. Default to latest
+      default: latest
+    HOST_IP:
+      description: ip of the postgres server to connect
+    USER:
+      description: username for the postgres server
+    PASSWORD:
+      description: password for the postgres server
+    SCRIPT:
+      description: script to execute
+     
+
+
+

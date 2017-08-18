@@ -1,0 +1,103 @@
+---
+type: workflow
+version: 1
+name: webserver-image-build-approve-deploy
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+    REGISTRY:
+      default: docker.applatix.net
+    REG_USER:
+      default: "%%config.admin@internal.docker.user%%"
+    REG_PASSWORD:
+      default: "%%config.admin@internal.docker.password%%"
+    VERSION:
+      default: "v1"
+    REQUIRED_APPROVALS:
+      default: " "
+    OPTIONAL_APPROVALS:
+      default: " "
+    NUMBER_OF_OPTIONAL_APPROVALS_NEEDED:
+      default: 0
+    TIMEOUT_IN_MINUTES:
+      default: 10 
+ 
+steps:
+  - checkout:
+      template: argo-checkout
+  - build:
+      template: webserver-image-build-container
+      arguments:
+        artifacts.CODE: "%%steps.checkout.outputs.artifacts.CODE%%"
+  - approval:
+      template: argoapproval
+  - deploy:
+      template: webserver-image-deployment
+---
+type: container
+version: 1
+name: webserver-image-build-container
+description: build webserver image
+
+inputs:
+  parameters:
+    VERSION:
+    # Encoded username and password
+    REGISTRY:
+    REG_USER:
+    REG_PASSWORD:
+ 
+  artifacts:
+    CODE:
+      path: "/src"
+
+  # Build a docker image and push it
+  # The docker:1.12 image already has the docker command installed
+image: docker:1.12
+command: [sh, -c, 'cd /src/webserver &&
+              docker login -u %%inputs.parameters.REG_USER%% -p %%inputs.parameters.REG_PASSWORD%% %%inputs.parameters.REGISTRY%% &&
+              docker build -f Dockerfile -t %%inputs.parameters.REGISTRY%%/demo/webserver-image:%%inputs.parameters.VERSION%% . &&
+              docker push %%inputs.parameters.REGISTRY%%/demo/webserver-image:%%inputs.parameters.VERSION%%']
+annotations:
+    # Enable docker access in this container by specifying the size of graph storage needed and the amount of cpu and memory required for docker commands
+    "ax_ea_docker_enable": '{ "graph-storage-name": "webserver", "graph-storage-size": "10Gi", "cpu_cores": 0.5, "mem_mib": 800}'
+
+---
+type: deployment
+version: 1
+name: webserver-image-deployment
+inputs:
+  parameters:
+    APPNAME:
+      default: "webserver"
+    DOMAIN:
+      default: " "
+    VERSION:
+      default: "v1"
+
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "node"
+external_routes:
+- target_port: 80
+  ip_white_list:
+    - 0.0.0.0/0
+
+containers:
+  webserver:
+    template: webserver-image-container
+
+---
+type: container
+version: 1
+name: webserver-image-container
+description: Run a node based web server.
+inputs:
+  parameters:
+    VERSION:
+image: "demox.applatix.io/demo/webserver-image:%%inputs.parameters.VERSION%%"
+command: ["cd /usr/src/app && npm install && npm start"]
+
+---

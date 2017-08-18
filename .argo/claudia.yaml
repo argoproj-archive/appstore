@@ -1,0 +1,178 @@
+---
+type: project
+version: 1
+name: Claudia
+description: AWS cost and usage analysis.
+actions:
+  run:
+    template: claudia-deploy-workflow
+categories: ["monitoring", "promoted"]
+publish:
+  branches:
+  - master
+labels:
+  tags: "[\"aws\"]"
+  publisher: Applatix
+assets:
+  icon: "/claudia/icon.png"
+  publisher_icon: "/claudia/AX_Pub.png"
+  detail: "/claudia/detail.md"
+
+---
+type: workflow
+version: 1
+name: claudia-deploy-workflow
+inputs:
+  parameters:
+    VERSION:
+      default: latest
+    DNS_PREFIX:
+      default: claudia
+    DNS_DOMAIN:
+      default: ""
+    APP_NAME:
+      default: claudia
+steps:
+- USERDB:
+    template: claudia-userdb
+  COSTDB:
+    template: claudia-costdb
+- CLAUDIAD:
+    template: claudia-server
+  INGESTD:
+    template: claudia-ingestd
+
+---
+type: deployment
+version: 1
+name: claudia-server
+application_name: "%%inputs.parameters.APP_NAME%%"
+deployment_name: claudia-server
+inputs:
+  parameters:
+    VERSION:
+    DNS_PREFIX:
+    DNS_DOMAIN:
+    APP_NAME:
+external_routes:
+- dns_prefix: "%%inputs.parameters.DNS_PREFIX%%"
+  dns_domain: "%%inputs.parameters.DNS_DOMAIN%%"
+  target_port: 80
+  ip_white_list:
+  - 0.0.0.0/0
+strategy:
+  type: rolling_update    
+containers:
+  claudiad:
+    image: applatix/claudia:%%inputs.parameters.VERSION%%
+    command: [/usr/bin/claudiad]
+    args: ["--insecure", "--port", "80"]
+    resources:
+      mem_mib: 512
+      cpu_cores: 0.1
+    env:
+    - name: POSTGRES_PASSWORD
+      value: my-secret-pw
+    - name: POSTGRES_DB
+      value: userdb
+
+---
+type: deployment
+version: 1
+name: claudia-ingestd
+application_name: "%%inputs.parameters.APP_NAME%%"
+deployment_name: claudia-ingestd
+internal_routes:
+- name: ingestd
+  ports:
+  - port: 8081
+    target_port: 8081
+containers:
+  ingestd:
+    image: applatix/claudia:%%inputs.parameters.VERSION%%
+    command: ["/usr/bin/ingestd"]
+    args: ["run"]
+    resources:
+      mem_mib: 512
+      cpu_cores: 0.1
+    env:
+    - name: POSTGRES_PASSWORD
+      value: my-secret-pw
+    - name: POSTGRES_DB
+      value: userdb
+inputs:
+  parameters:
+    VERSION:
+    APP_NAME:
+
+---
+type: deployment
+version: 1
+name: claudia-userdb
+application_name: "%%inputs.parameters.APP_NAME%%"
+deployment_name: claudia-userdb
+internal_routes:
+- name: userdb
+  ports:
+  - port: 5432
+    target_port: 5432
+volumes:
+  userdb-vol:
+    storage_class: ssd
+    size_gb: 1
+inputs:
+  parameters:
+    APP_NAME:
+containers:
+  userdb:
+    image: postgres:9.6.1
+    resources:
+      mem_mib: 256
+      cpu_cores: 0.1
+    env:
+    - name: POSTGRES_PASSWORD
+      value: my-secret-pw
+    - name: POSTGRES_DB
+      value: userdb
+    - name: PGDATA
+      value: /var/lib/postgresql/data/pgdata
+    inputs:
+      volumes:
+        userdb-vol:
+          from: "%%volumes.userdb-vol%%"
+          mount_path: /var/lib/postgresql/data
+
+---
+type: deployment
+version: 1
+name: claudia-costdb
+application_name: "%%inputs.parameters.APP_NAME%%"
+deployment_name: claudia-costdb
+internal_routes:
+- name: costdb
+  ports:
+  - port: 8086
+    target_port: 8086
+volumes:
+  costdb-vol:
+    storage_class: ssd
+    size_gb: 20
+inputs:
+  parameters:
+    APP_NAME:
+containers:
+  costdb:
+    image: influxdb:1.2.0
+    resources:
+      mem_mib: 4096
+      cpu_cores: 0.1
+    env:
+    - name: INFLUXDB_HTTP_MAX_ROW_LIMIT
+      value: "40000"
+    - name: INFLUXDB_REPORTING_DISABLED
+      value: "true"
+    inputs:
+      volumes:
+        costdb-vol:
+          from: "%%volumes.costdb-vol%%"
+          mount_path: /var/lib/influxdb
