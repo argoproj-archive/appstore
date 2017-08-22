@@ -22,9 +22,9 @@ resources:
   mem_mib: 1024
   cpu_cores: 0.2
 image: "mongo:%%inputs.parameters.IMAGE_TAG%%"
-command: ["mongo"]
+command: ["sh", "-c"]
 args: [
-  "%%inputs.parameters.HOST_IP%%:27017 < /src%%inputs.parameters.SCRIPT%%"
+  "mongo %%inputs.parameters.HOST_IP%%:27017 < /src%%inputs.parameters.SCRIPT%%"
 ]
 inputs:
   parameters:
