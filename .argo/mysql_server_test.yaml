@@ -1,0 +1,66 @@
+---
+type: container
+version: 1
+name: mysql_client
+description: mysql client
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: "mysql:%%inputs.parameters.IMAGE_TAG%%"
+env:
+- name: MYSQL_ROOT_PASSWORD
+  value: client
+command: ["sh", "-c"]
+args: ["mysql -u%%inputs.parameters.USER%% -p%%inputs.parameters.PASSWORD%% -h %%inputs.parameters.HOST_IP%% < /src%%inputs.parameters.SCRIPT%%"]
+inputs:
+  artifacts:
+   CODE:
+    path: /src
+  parameters:
+    IMAGE_TAG:
+      description: mysql docker image tag, e.g. 8.0.0. Default to latest
+      default: latest
+    HOST_IP:
+      description: ip of the mysql server to connect
+    USER:
+      description: username for the mysql server
+    PASSWORD:
+      description: password for the mysql server
+    SCRIPT:
+      description: script to execute
+outputs:
+
+
+
+---
+type: workflow
+version: 1
+name: Mysql Server test
+description: This is the workflow for Mysql server test
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+    SCRIPT: 
+      default: "/mysql/scripts/showdb.sql"
+      description: script to execute     
+fixtures:
+  - mysql_remote:
+      template: mysql_server
+      arguments:
+        parameters.root_password: "server"
+        parameters.image_tag: "8.0.0"
+steps:
+  - CHECKOUT:
+      template: argo-checkout
+  - test:
+      template: mysql_client
+      arguments:
+        parameters.IMAGE_TAG: "8.0.0"
+        parameters.HOST_IP: "%%fixtures.mysql_remote.ip%%"
+        parameters.USER: "root"
+        parameters.PASSWORD: "server"
+        artifacts.CODE: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"
+     
