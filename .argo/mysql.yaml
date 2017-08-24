@@ -1,4 +1,49 @@
 ---
+type: project
+version: 1
+name: MySQL
+description: Open source relational database.
+actions:
+  run:
+    template: mysql_server
+  test:
+    template: Mysql Server test
+    arguments:
+      parameters.SCRIPT: "/mysql/scripts/showdb.sql"
+categories: ["database"]
+publish:
+  branches:
+    - master
+labels:
+  tags: "[\"sql\"]"
+  publisher: Applatix
+assets:
+  icon: "/mysql/mysql.png"
+  publisher_icon: "/mysql/AX_Pub.png"
+  detail: "/mysql/README.md"
+
+---
+type: container
+version: 1
+name: mysql_server
+description: mysql server
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: "mysql:%%inputs.parameters.image_tag%%"
+env:
+- name: MYSQL_ROOT_PASSWORD
+  value: "%%inputs.parameters.root_password%%"
+inputs:
+  parameters:
+    image_tag:
+      description: mysql docker image tag, e.g. 8.0.0. Default to latest
+      default: latest
+    root_password:
+      default: password
+      description: password for mysql root user
+
+---
 type: container
 version: 1
 name: mysql_client
@@ -14,8 +59,8 @@ command: ["sh", "-c"]
 args: ["mysql -u%%inputs.parameters.USER%% -p%%inputs.parameters.PASSWORD%% -h %%inputs.parameters.HOST_IP%% < /src%%inputs.parameters.SCRIPT%%"]
 inputs:
   artifacts:
-   CODE:
-    path: /src
+    CODE:
+      path: /src
   parameters:
     IMAGE_TAG:
       description: mysql docker image tag, e.g. 8.0.0. Default to latest
@@ -28,7 +73,7 @@ inputs:
       description: password for the mysql server
     SCRIPT:
       description: script to execute
-outputs:
+
 
 
 
