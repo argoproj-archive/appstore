@@ -1,0 +1,23 @@
+---
+type: project
+version: 1
+name: Selenium testing
+description: Example workflow launching selenium tests.
+actions:
+  test:
+    template: Selenium Demo
+  test_failure:
+    template: Selenium Demo
+    arguments:
+      parameters.TEST_FAILURE: "true"
+categories: ["devops", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"test\"]"
+    publisher: Applatix
+assets:
+    icon: "/selenium/selenium.png"
+    publisher_icon: "/selenium/AX_Pub.png"
+    detail: "/selenium/README.md"
