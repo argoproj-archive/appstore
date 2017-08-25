@@ -27,7 +27,6 @@ name: selenium-with-video-converter-workflow
 inputs:
   artifacts:
     CODE:
-      path: /src
   parameters:
     BROWSER:
     TEST_FAILURE:
@@ -47,7 +46,6 @@ name: selenium-test-workflow
 inputs:
   artifacts:
     CODE:
-      path: /src
   parameters:
     BROWSER:
     TEST_FAILURE:
