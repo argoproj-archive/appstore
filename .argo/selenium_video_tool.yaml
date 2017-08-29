@@ -19,7 +19,7 @@ inputs:
 outputs:
   artifacts:
     VIDEO:
-      path: "%%inputs.parameters.OUTPUT"
+      path: "%%inputs.parameters.OUTPUT%%"
 
 ---
 type: container
