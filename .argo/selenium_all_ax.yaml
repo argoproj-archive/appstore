@@ -9,7 +9,7 @@ inputs:
     REPO:
       default: "%%session.repo%%"
     BROWSER:
-      default: $$[chrome,firefox]$$
+      default: chrome
     TEST_FAILURE:
       default: "false"
 steps:

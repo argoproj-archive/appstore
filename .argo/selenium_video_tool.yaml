@@ -6,7 +6,7 @@ description: Base VNC recorder container
 resources:
   mem_mib: 1024
   cpu_cores: 0.1
-image: argoproj/axvncrecorder:v1
+image: applatix/axvncrecorder:v1
 env:
 - name: host
   value: "%%inputs.parameters.REMOTE%%"
@@ -29,7 +29,7 @@ description: Convert FLV to MPEG
 resources:
   mem_mib: 1024
   cpu_cores: 0.1
-image: argoproj/axvncrecorder:v1
+image: applatix/axvncrecorder:v1
 command: ["sh", "-c"]
 args: [
   "mkdir -p /tmp/report && ffmpeg -i /tmp/video.flv -ar 22050 /tmp/report/video.mp4 && echo '<!DOCTYPE html><html><body><video width=\"640\" height=\"480\" controls><source src=\"video.mp4\" type=\"video/mp4\"></video></body></html>' > /tmp/report/index.html"
