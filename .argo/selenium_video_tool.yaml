@@ -11,7 +11,7 @@ env:
 - name: host
   value: "%%inputs.parameters.REMOTE%%"
 - name: output
-  value: "%%inputs.parameters.OUTPUT"
+  value: "%%inputs.parameters.OUTPUT%%"
 inputs:
     parameters:
       REMOTE:
