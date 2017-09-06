@@ -1,0 +1,108 @@
+---
+type: project
+version: 1
+name: National Parks
+description: This is the workflow to deploy National Parks java application with 2 conatiners (one for Mongodb and one for Apache).
+actions:
+  run:
+    template: Deploy National Parks
+categories: ["demo", "promoted"]
+publish:
+  branches:
+    - master
+labels:
+    tags: "[\"demo\"]"
+    publisher: Applatix
+assets:
+    icon: /java-app/java-mongo.png
+    publisher_icon: /java-app/AX_Pub.png
+    detail: /java-app/overview.md
+
+
+---
+type: workflow
+version: 1
+name: Deploy National Parks 
+description: This is the workflow to deploy Mongo container and a ubuntu container with compiled war file. Once the container is started the war is exploded into a full fledged java based web application.
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    APPNAME:
+      default: national-parks
+    REPO:
+      default: "%%session.repo%%"  
+steps:
+  - CHECKOUT:
+      template: argo-checkout
+  - DEPLOY-MONGO:
+      template: deploy-parks-mongo
+  - INSERT_DATA:
+      template: insert-parks-data
+      arguments:
+        artifacts.CODE: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"
+  - DEPLOY_NATIONALPARKS:
+      template: deploy-national-parks
+
+---
+type: deployment
+version: 1
+name: deploy-parks-mongo
+inputs:
+  parameters:
+    APPNAME:
+      default: national-parks
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "mongo-deploy"
+scale:
+  min: 1
+internal_routes:
+  - name: parks-mongo
+    ports:
+      - port: 27017
+        target_port: 27017
+containers:
+  server:
+    image: mongo:3.2.9
+    resources:
+      mem_mib: 2048
+      cpu_cores: 0.3
+
+---
+type: container
+version: 1
+name: insert-parks-data
+description: National Park Data Insert
+resources:
+  mem_mib: 1024
+  cpu_cores: 0.2
+image: mongo:3.2.9
+command: [sh,-c,'mongoimport --host parks-mongo.%%inputs.parameters.APPNAME%%  --drop -d demo -c nationalparks --type json --jsonArray --file /src/java-app/national-parks.json']
+inputs:
+  artifacts:
+    CODE:
+      path: /src
+  parameters:
+    APPNAME:
+
+---
+type: deployment
+name: deploy-national-parks
+inputs:
+  parameters:
+    APPNAME:
+      default: "national-parks"
+application_name: "%%inputs.parameters.APPNAME%%"
+deployment_name: "national-parks-deploy"
+scale:
+  min: 1
+external_routes:
+  - target_port: 8080
+    ip_white_list:
+      - 0.0.0.0/0
+containers:
+  server:
+    image: applatix/nationalparks
+    resources:
+      mem_mib: 1024
+      cpu_cores: 0.4
