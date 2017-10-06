@@ -6,6 +6,7 @@ description: Run a nexus repository server.
 resources:
   mem_mib: 512
   cpu_cores: 0.3
+#image: sonatype/nexus3:latest
 image: sonatype/nexus:latest
 readiness_probe:
   http_get:
@@ -44,7 +45,7 @@ containers:
 ---
 type: workflow
 version: 1
-name: nexus-repo-run-workflow
+name: nexus-deployment-workflow
 description: This is a workflow that deploys and runs Nexus Repository.
 inputs:
 steps:

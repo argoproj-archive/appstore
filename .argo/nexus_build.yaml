@@ -1,0 +1,44 @@
+---
+type: workflow
+version: 1
+name: nexus-build-workflow
+inputs:
+  parameters:
+    COMMIT:
+      default: "%%session.commit%%"
+    REPO:
+      default: "%%session.repo%%"
+steps:
+- CHECKOUT:
+    resources:
+      mem_mib: 500
+      cpu_cores: 0.1
+    image: argoproj/argoscm:v2.0
+    command: ["axscm"]
+    args: ["clone", "%%inputs.parameters.REPO%%", "/src", "--commit", "%%inputs.parameters.COMMIT%%"]
+    outputs:
+      artifacts:
+        CODE:
+          path: /src
+- BUILD:
+    image: "docker:1.12"
+    resources:
+      cpu_cores: 0.2
+      mem_mib: 512
+    command: ["sh", "-c"]
+    args: ['cd /src/webserver && docker build -f Dockerfile . -t mukulika/webserver:latest && docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD && docker push mukulika/webserver:latest'] 
+    env:
+    - name: REGISTRY_USER
+      value: "%%config.admin@internal.docker.user%%"
+    - name: REGISTRY_PASSWORD
+      value: "%%config.admin@internal.docker.password%%"
+    inputs:
+      artifacts:
+        CODE:
+          from: "%%steps.CHECKOUT.outputs.artifacts.CODE%%"
+          path: /src
+    annotations:
+      # This annotation attaches a docker daemon to this container and allocates
+      # 10GB for graph storage, and cpu_cores, mem_mib are used for allocating those
+      # resources to the docker daemon
+      ax_ea_docker_enable: '{"graph-storage-size": "10Gi", "cpu_cores":0.5, "mem_mib":800}'

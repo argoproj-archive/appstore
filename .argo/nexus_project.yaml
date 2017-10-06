@@ -5,7 +5,7 @@ name: Nexus Repository
 description: Application for running Nexus Repository in Applatix.
 actions:
   run:
-    template: nexus-repo-run-workflow
+      template: nexus-deployment-workflow
 categories: ["devops", "promoted"]
 publish:
   branches:
