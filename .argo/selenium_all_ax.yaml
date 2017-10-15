@@ -58,7 +58,7 @@ fixtures:
     template: vnc-recorder
     arguments:
       parameters.REMOTE: "%%fixtures.selenium.ip%%"
-      parameters.OUTPUT: /tmp/video.flv
+      parameters.OUTPUT: /tmp/video
 steps:
 - E2E_TEST:
     template: selenium-e2e-test
