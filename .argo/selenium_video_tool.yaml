@@ -37,7 +37,7 @@ args: [
 inputs:
   artifacts:
     VIDEO_INPUT:
-      path: /tmp
+      path: /tmp/video.flv
 outputs:
   artifacts:
     VIDEO:
